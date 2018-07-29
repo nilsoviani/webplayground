@@ -41,6 +41,8 @@ INSTALLED_APPS = [
     # Apps Propias
     'core',
     'pages.apps.PagesConfig',
+    'profiles',
+    'messenger',
     #Apps de Terceros
     'ckeditor',
 ]
@@ -201,5 +203,17 @@ CKEDITOR_CONFIGS = {
 }
 
 # Redireccionamiento de Autenticaciones:
-LOGIN_REDIRECT_URL = 'pages:pages'
+# LOGIN_REDIRECT_URL = 'pages:pages' se comenta para que vaya a la página genérica en accounts/profile
 LOGOUT_REDIRECT_URL = 'home'
+
+# Emails
+if DEBUG:
+    EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend' # Para enviar en forma local por consola o ficheros
+    EMAIL_FILE_PATH = os.path.join(BASE_DIR, 'sent_emails')
+else:
+    # Aqui hay que configurar un email real para producción
+    pass
+
+# Archivos Multimedia
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')

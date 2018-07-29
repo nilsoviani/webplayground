@@ -1,0 +1,75 @@
+{% extends 'core/base.html' %}
+{% load static %}
+{% block title %}Perfil{% endblock %}
+{% block content %}
+<style>.errorlist{color:red;} label{display:none}</style>
+<main role="main">
+  <div class="container">
+    <div class="row mt-3">
+      <div class="col-md-9 mx-auto mb-5">
+
+        {% if 'email_updated' in request.GET %}
+          <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <strong>¡Email modificado exitosamente!</strong>
+            Haz cambiado tu dirección de correo electrónico
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+        {% endif %}
+
+        {% if 'updated' in request.GET %}
+          <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <strong>¡El perfil se ha actualizado correctamente!</strong>
+            Haz modificado la información de tu perfil exitosamente.
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+        {% endif %}
+
+        <form action="" method="post" enctype="multipart/form-data">{% csrf_token %}
+          <div class="row">
+            <!-- Previa del avatar -->
+            <div class="col-md-2">
+
+              {% if request.user.profile.avatar %}
+                <img src="{{request.user.profile.avatar.url}}" class="img-fluid">
+                <small id="passwordHelpBlock" class="form-text text-muted mt-1">
+                    ¿Borrar? <input type="checkbox" id="avatar-clear" name="avatar-clear" />
+                </small>
+                
+              {% else %}
+                <img src="{% static 'registration/img/no-avatar.jpg' %}" class="img-fluid">
+              {% endif %}
+
+            </div>
+
+            <!-- Formulario -->
+
+            <div class="col-md-10">
+              <h3>Perfil</h3>
+              <input type="file" name="avatar" class="form-control-file mt-3" id="id_avatar">
+
+              {{ form.bio }}
+              {{ form.link }}
+
+              <div class="input-group mb-3  mt-3">
+                <input type="email" class="form-control" value="{{request.user.email}}" aria-label="Recipient's username" aria-describedby="button-addon2" readonly>
+                <div class="input-group-append">
+                    <a href="{% url 'profile_email' %}" class="btn btn-outline-secondary" role="button" aria-pressed="true">Cambiar email</a>
+                </div>
+              </div>
+
+              <a href="{% url 'password_change' %}" class="btn btn-info" role="button" aria-pressed="true">Cambiar contraseña</a>
+
+              <input type="submit" class="btn btn-primary btn-block mt-3" value="Actualizar">
+            
+              </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</main>
+{% endblock %}
